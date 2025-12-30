@@ -38,6 +38,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format, formatDistanceToNow } from 'date-fns';
+import { AIJobAssistant } from '../components/jobs/AIJobAssistant';
 
 const STATUS_ORDER = ['draft', 'pending', 'in_progress', 'review', 'completed', 'cancelled', 'on_hold'];
 
@@ -50,13 +51,15 @@ export default function Jobs() {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [activeTab, setActiveTab] = useState('all');
+  const [aiSuggestions, setAISuggestions] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     status: 'draft',
     priority: 'medium',
     due_date: '',
-    customer_id: ''
+    customer_id: '',
+    value: ''
   });
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -84,6 +87,16 @@ export default function Jobs() {
       if (!currentOrgId) return [];
       const filter = buildFilter({});
       return await base44.entities.Customer.filter(filter);
+    },
+    enabled: !!currentOrgId
+  });
+
+  const { data: products = [] } = useQuery({
+    queryKey: ['products', currentOrgId, currentWorkspaceId],
+    queryFn: async () => {
+      if (!currentOrgId) return [];
+      const filter = buildFilter({ status: 'active' });
+      return await base44.entities.Product.filter(filter);
     },
     enabled: !!currentOrgId
   });
@@ -116,7 +129,8 @@ export default function Jobs() {
     onSuccess: () => {
       queryClient.invalidateQueries(['jobs']);
       setShowCreateDialog(false);
-      setFormData({ title: '', description: '', status: 'draft', priority: 'medium', due_date: '', customer_id: '' });
+      setFormData({ title: '', description: '', status: 'draft', priority: 'medium', due_date: '', customer_id: '', value: '' });
+      setAISuggestions(null);
       toast.success('Job created successfully');
       if (showNewForm) {
         navigate(createPageUrl('Jobs'));
@@ -323,19 +337,36 @@ export default function Jobs() {
 
       <Dialog open={showCreateDialog} onOpenChange={(open) => {
         setShowCreateDialog(open);
-        if (!open && showNewForm) {
-          navigate(createPageUrl('Jobs'));
+        if (!open) {
+          setAISuggestions(null);
+          if (showNewForm) {
+            navigate(createPageUrl('Jobs'));
+          }
         }
       }}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Create New Job</DialogTitle>
             <DialogDescription>
-              Enter the job details below
+              Enter the job details below. Get AI-powered recommendations for products, value estimation, and delay risk.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit}>
-            <div className="space-y-4 py-4">
+            <div className="space-y-4 py-4">.
+              <AIJobAssistant
+                jobTitle={formData.title}
+                jobDescription={formData.description}
+                currentValue={formData.value}
+                historicalJobs={jobs}
+                products={products}
+                onValueEstimated={(value) => setFormData(prev => ({ ...prev, value: value.toString() }))}
+                onProductsSuggested={(suggestions) => setAISuggestions(suggestions)}
+                onDelayPredicted={(prediction) => {
+                  if (prediction.risk_level?.toLowerCase().includes('high')) {
+                    toast.warning('High delay risk detected. Review AI recommendations.');
+                  }
+                }}
+              />
               <div className="space-y-2">
                 <Label htmlFor="title">Title *</Label>
                 <Input
@@ -419,6 +450,16 @@ export default function Jobs() {
                     </SelectContent>
                   </Select>
                 </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="value">Estimated Value ($)</Label>
+                <Input
+                  id="value"
+                  type="number"
+                  placeholder="Enter or let AI estimate"
+                  value={formData.value}
+                  onChange={(e) => setFormData(prev => ({ ...prev, value: e.target.value }))}
+                />
               </div>
             </div>
             <DialogFooter>
