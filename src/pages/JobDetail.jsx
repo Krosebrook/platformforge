@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format, formatDistanceToNow, differenceInDays } from 'date-fns';
+import { AIJobSummary } from '../components/jobs/AIJobSummary';
 
 const STATUS_FLOW = ['draft', 'pending', 'in_progress', 'review', 'completed'];
 
@@ -67,6 +68,17 @@ export default function JobDetail() {
         organization_id: currentOrgId,
         status: 'active'
       });
+    },
+    enabled: !!currentOrgId
+  });
+
+  const { data: historicalJobs = [] } = useQuery({
+    queryKey: ['historicalJobs', currentOrgId],
+    queryFn: async () => {
+      if (!currentOrgId) return [];
+      return await base44.entities.Job.filter({
+        organization_id: currentOrgId
+      }, '-created_date', 50);
     },
     enabled: !!currentOrgId
   });
@@ -368,6 +380,12 @@ export default function JobDetail() {
         </div>
 
         <div className="space-y-6">
+          <AIJobSummary 
+            job={job} 
+            historicalJobs={historicalJobs}
+            currentOrgId={currentOrgId}
+          />
+
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">Summary</CardTitle>
