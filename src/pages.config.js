@@ -12,6 +12,9 @@ import Integrations from './pages/Integrations';
 import Docs from './pages/Docs';
 import Help from './pages/Help';
 import Profile from './pages/Profile';
+import CustomerDetail from './pages/CustomerDetail';
+import JobDetail from './pages/JobDetail';
+import ProductDetail from './pages/ProductDetail';
 import __Layout from './Layout.jsx';
 
 
@@ -30,6 +33,9 @@ export const PAGES = {
     "Docs": Docs,
     "Help": Help,
     "Profile": Profile,
+    "CustomerDetail": CustomerDetail,
+    "JobDetail": JobDetail,
+    "ProductDetail": ProductDetail,
 }
 
 export const pagesConfig = {
