@@ -8,6 +8,10 @@ import Settings from './pages/Settings';
 import AuditLog from './pages/AuditLog';
 import Approvals from './pages/Approvals';
 import SystemHealth from './pages/SystemHealth';
+import Integrations from './pages/Integrations';
+import Docs from './pages/Docs';
+import Help from './pages/Help';
+import Profile from './pages/Profile';
 import __Layout from './Layout.jsx';
 
 
@@ -22,6 +26,10 @@ export const PAGES = {
     "AuditLog": AuditLog,
     "Approvals": Approvals,
     "SystemHealth": SystemHealth,
+    "Integrations": Integrations,
+    "Docs": Docs,
+    "Help": Help,
+    "Profile": Profile,
 }
 
 export const pagesConfig = {
