@@ -7,6 +7,8 @@ import { useTenant } from '../components/common/TenantContext';
 import { logAuditEvent } from '../components/common/AuditLogger';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { ActivityFeed } from '../components/ui/ActivityFeed';
+import SendEmailDialog from '../components/communications/SendEmailDialog';
+import CommunicationHistory from '../components/communications/CommunicationHistory';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,6 +40,7 @@ export default function CustomerDetail() {
   
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
+  const [showEmailDialog, setShowEmailDialog] = useState(false);
 
   const { data: customer, isLoading } = useQuery({
     queryKey: ['customer', customerId],
@@ -290,6 +293,21 @@ export default function CustomerDetail() {
         <div className="space-y-6">
           <Card>
             <CardHeader>
+              <CardTitle className="text-lg">Communication</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Button 
+                className="w-full"
+                onClick={() => setShowEmailDialog(true)}
+              >
+                <Mail className="w-4 h-4 mr-2" />
+                Send Email
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
               <CardTitle className="text-lg">Summary</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -316,8 +334,16 @@ export default function CustomerDetail() {
             limit={10}
             maxHeight="300px"
           />
+
+          <CommunicationHistory customerId={customerId} />
         </div>
       </div>
+
+      <SendEmailDialog 
+        open={showEmailDialog}
+        onClose={() => setShowEmailDialog(false)}
+        customer={customer}
+      />
     </div>
   );
 }

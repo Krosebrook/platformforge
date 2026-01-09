@@ -23,11 +23,14 @@ import {
 } from "@/components/ui/select";
 import { 
   ArrowLeft, Edit, Save, User, Calendar, Clock,
-  DollarSign, AlertTriangle, CheckCircle
+  DollarSign, AlertTriangle, CheckCircle, Mail
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format, formatDistanceToNow, differenceInDays } from 'date-fns';
 import { AIJobSummary } from '../components/jobs/AIJobSummary';
+import JobAutomation from '../components/jobs/JobAutomation';
+import SendEmailDialog from '../components/communications/SendEmailDialog';
+import CommunicationHistory from '../components/communications/CommunicationHistory';
 
 const STATUS_FLOW = ['draft', 'pending', 'in_progress', 'review', 'completed'];
 
@@ -41,6 +44,7 @@ export default function JobDetail() {
   
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
+  const [showEmailDialog, setShowEmailDialog] = useState(false);
 
   const { data: job, isLoading } = useQuery({
     queryKey: ['job', jobId],
@@ -380,11 +384,34 @@ export default function JobDetail() {
         </div>
 
         <div className="space-y-6">
+          <JobAutomation 
+            job={job}
+            onUpdate={() => queryClient.invalidateQueries(['job', jobId])}
+          />
+
           <AIJobSummary 
             job={job} 
             historicalJobs={historicalJobs}
             currentOrgId={currentOrgId}
           />
+
+          {customer && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Customer Communication</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Button 
+                  className="w-full"
+                  variant="outline"
+                  onClick={() => setShowEmailDialog(true)}
+                >
+                  <Mail className="w-4 h-4 mr-2" />
+                  Send Email to {customer.name}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
 
           <Card>
             <CardHeader>
@@ -433,8 +460,19 @@ export default function JobDetail() {
             limit={10}
             maxHeight="300px"
           />
+
+          <CommunicationHistory customerId={customer?.id} jobId={jobId} />
         </div>
       </div>
+
+      {customer && (
+        <SendEmailDialog 
+          open={showEmailDialog}
+          onClose={() => setShowEmailDialog(false)}
+          customer={customer}
+          job={job}
+        />
+      )}
     </div>
   );
 }

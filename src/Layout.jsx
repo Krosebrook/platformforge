@@ -54,6 +54,12 @@ const NAVIGATION = [
     description: 'Overview & metrics'
   },
   { 
+    name: 'Analytics', 
+    icon: BarChart3, 
+    page: 'Analytics',
+    description: 'Job performance metrics'
+  },
+  { 
     name: 'Customers', 
     icon: Users, 
     page: 'Customers',
