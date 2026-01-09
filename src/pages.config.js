@@ -15,6 +15,7 @@ import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import SystemHealth from './pages/SystemHealth';
 import Team from './pages/Team';
+import Analytics from './pages/Analytics';
 import __Layout from './Layout.jsx';
 
 
@@ -36,6 +37,7 @@ export const PAGES = {
     "Settings": Settings,
     "SystemHealth": SystemHealth,
     "Team": Team,
+    "Analytics": Analytics,
 }
 
 export const pagesConfig = {
