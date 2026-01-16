@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
@@ -15,8 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Dialog,
   DialogContent,
@@ -33,11 +32,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { 
-  Plus, Briefcase, Calendar, Clock, User,
-  AlertTriangle, CheckCircle, Play, Pause, FileText
+  Plus, Briefcase, User,
+  AlertTriangle, FileText
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { format, formatDistanceToNow } from 'date-fns';
+import { format } from 'date-fns';
 import { AIJobAssistant } from '../components/jobs/AIJobAssistant';
 import JobTemplateSelector from '../components/templates/JobTemplateSelector';
 

@@ -4,9 +4,8 @@ import { base44 } from '@/api/base44Client';
 import { useTenant } from '../components/common/TenantContext';
 import { ApprovalRequestCard, processApprovalDecision } from '../components/common/ApprovalFlow';
 import { RequireFeature } from '../components/common/PermissionGate';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { 
   Shield, Clock, CheckCircle, XCircle, AlertTriangle

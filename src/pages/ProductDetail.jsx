@@ -21,8 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { 
-  ArrowLeft, Edit, Save, Package, DollarSign, 
-  Boxes, AlertTriangle, Tag
+  ArrowLeft, Edit, Save, Package, AlertTriangle
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -9,7 +9,7 @@ import { Toaster } from "@/components/ui/sonner";
 import PWAInstallPrompt from './components/common/PWAInstallPrompt';
 import OfflineIndicator from './components/common/OfflineIndicator';
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -30,13 +30,11 @@ import {
 import {
   Sheet,
   SheetContent,
-  SheetTrigger,
 } from "@/components/ui/sheet";
 import {
   LayoutDashboard, Users, Package, Briefcase, Settings, 
   Search, Bell, Menu, Building2, ChevronDown, LogOut,
-  Shield, FileText, Activity, Zap, HelpCircle, ChevronRight,
-  FolderKanban, Link2, Heart, BarChart3, Clock
+  Shield, FileText, Activity, Zap, HelpCircle, Link2, Heart, BarChart3
 } from 'lucide-react';
 
 const queryClient = new QueryClient({

@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Select,
@@ -24,8 +23,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { 
-  ArrowLeft, Mail, Phone, Building2, MapPin, 
-  Edit, Save, Briefcase, DollarSign, Tag
+  ArrowLeft, Mail, Phone, Building2, 
+  Edit, Save, Briefcase
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';

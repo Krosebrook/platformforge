@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sparkles, TrendingUp, AlertTriangle, Clock, Plus, Loader2 } from 'lucide-react';
+import { Sparkles, TrendingUp, AlertTriangle, Plus, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 export function AIJobAssistant({ 

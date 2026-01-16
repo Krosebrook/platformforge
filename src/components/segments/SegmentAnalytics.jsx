@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { TrendingUp, DollarSign, Briefcase, Users } from 'lucide-react';
+import { TrendingUp } from 'lucide-react';
 
 export default function SegmentAnalytics({ customers, jobs }) {
   const totalValue = customers.reduce((sum, c) => sum + (c.lifetime_value || 0), 0);

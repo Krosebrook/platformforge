@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { useTenant } from '../components/common/TenantContext';
 import { logAuditEvent } from '../components/common/AuditLogger';
@@ -23,8 +23,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { 
-  Building2, Shield, CreditCard, Bell, Trash2, 
-  CheckCircle, AlertTriangle, Zap
+  Building2, Shield, CreditCard, Bell, Trash2, AlertTriangle, Zap
 } from 'lucide-react';
 import { toast } from 'sonner';
 
