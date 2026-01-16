@@ -1,3 +1,4 @@
+import Analytics from './pages/Analytics';
 import Approvals from './pages/Approvals';
 import AuditLog from './pages/AuditLog';
 import CustomerDetail from './pages/CustomerDetail';
@@ -15,11 +16,11 @@ import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import SystemHealth from './pages/SystemHealth';
 import Team from './pages/Team';
-import Analytics from './pages/Analytics';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "Analytics": Analytics,
     "Approvals": Approvals,
     "AuditLog": AuditLog,
     "CustomerDetail": CustomerDetail,
@@ -37,7 +38,6 @@ export const PAGES = {
     "Settings": Settings,
     "SystemHealth": SystemHealth,
     "Team": Team,
-    "Analytics": Analytics,
 }
 
 export const pagesConfig = {
