@@ -9,13 +9,15 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
-import { Briefcase, FileText, MessageSquare, Plus, Download, Calendar } from 'lucide-react';
+import { Briefcase, FileText, MessageSquare, Plus, Download, Calendar, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import DocumentUploader from '../components/documents/DocumentUploader';
 
 export default function CustomerPortal() {
   const queryClient = useQueryClient();
   const [showRequestDialog, setShowRequestDialog] = useState(false);
+  const [showDocUploader, setShowDocUploader] = useState(false);
   const [requestForm, setRequestForm] = useState({ title: '', description: '', priority: 'medium' });
 
   // Get current user
@@ -51,6 +53,20 @@ export default function CustomerPortal() {
     queryFn: async () => {
       if (!customerRecord?.id) return [];
       return await base44.entities.Communication.filter({ customer_id: customerRecord.id }, '-created_date');
+    },
+    enabled: !!customerRecord?.id
+  });
+
+  // Fetch documents for this customer
+  const { data: documents = [] } = useQuery({
+    queryKey: ['myDocuments', customerRecord?.id],
+    queryFn: async () => {
+      if (!customerRecord?.id) return [];
+      return await base44.entities.Document.filter({ 
+        customer_id: customerRecord.id,
+        status: 'active',
+        is_latest_version: true
+      }, '-created_date');
     },
     enabled: !!customerRecord?.id
   });
@@ -330,16 +346,47 @@ export default function CustomerPortal() {
           <TabsContent value="documents">
             <Card>
               <CardHeader>
-                <CardTitle>Documents & Attachments</CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle>Documents & Attachments</CardTitle>
+                  <Button onClick={() => setShowDocUploader(true)} size="sm">
+                    <Upload className="w-4 h-4 mr-2" />
+                    Upload Document
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
-                {communications.filter(c => c.attachments?.length > 0).length === 0 ? (
+                {documents.length === 0 && communications.filter(c => c.attachments?.length > 0).length === 0 ? (
                   <div className="text-center py-12">
                     <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                     <p className="text-gray-500">No documents available</p>
+                    <Button className="mt-4" onClick={() => setShowDocUploader(true)}>
+                      Upload Your First Document
+                    </Button>
                   </div>
                 ) : (
                   <div className="space-y-2">
+                    {documents.map(doc => (
+                      <div key={doc.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
+                        <div className="flex items-center gap-3">
+                          <FileText className="w-5 h-5 text-gray-400" />
+                          <div>
+                            <p className="font-medium">{doc.file_name}</p>
+                            <p className="text-xs text-gray-500">
+                              Uploaded {format(new Date(doc.created_date), 'MMM d, yyyy')}
+                              {doc.version > 1 && ` • Version ${doc.version}`}
+                            </p>
+                          </div>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => window.open(doc.file_url, '_blank')}
+                        >
+                          <Download className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
+                    
                     {communications
                       .filter(c => c.attachments?.length > 0)
                       .flatMap(comm => 
@@ -370,6 +417,15 @@ export default function CustomerPortal() {
             </Card>
           </TabsContent>
         </Tabs>
+
+        <DocumentUploader
+          customerId={customerRecord.id}
+          organizationId={customerRecord.organization_id}
+          workspaceId={customerRecord.workspace_id}
+          uploadedByRole="customer"
+          open={showDocUploader}
+          onOpenChange={setShowDocUploader}
+        />
       </div>
     </div>
   );
