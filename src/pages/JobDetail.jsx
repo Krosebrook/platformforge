@@ -32,6 +32,9 @@ import JobAutomation from '../components/jobs/JobAutomation';
 import SendEmailDialog from '../components/communications/SendEmailDialog';
 import CommunicationHistory from '../components/communications/CommunicationHistory';
 import DocumentManager from '../components/documents/DocumentManager';
+import TaskChecklist from '../components/project/TaskChecklist';
+import TimeTracker from '../components/project/TimeTracker';
+import GanttChart from '../components/project/GanttChart';
 
 const STATUS_FLOW = ['draft', 'pending', 'in_progress', 'review', 'completed'];
 
@@ -46,6 +49,7 @@ export default function JobDetail() {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [showProjectTools, setShowProjectTools] = useState(true);
 
   const { data: job, isLoading } = useQuery({
     queryKey: ['job', jobId],
@@ -86,6 +90,14 @@ export default function JobDetail() {
       }, '-created_date', 50);
     },
     enabled: !!currentOrgId
+  });
+
+  const { data: tasks = [] } = useQuery({
+    queryKey: ['tasks', jobId],
+    queryFn: async () => {
+      return await base44.entities.Task.filter({ job_id: jobId }, 'order');
+    },
+    enabled: !!jobId
   });
 
   React.useEffect(() => {
@@ -465,6 +477,24 @@ export default function JobDetail() {
           <CommunicationHistory customerId={customer?.id} jobId={jobId} />
         </div>
       </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <TaskChecklist 
+          jobId={jobId}
+          organizationId={currentOrgId}
+          workspaceId={currentWorkspaceId}
+          members={members}
+        />
+        
+        <TimeTracker 
+          jobId={jobId}
+          organizationId={currentOrgId}
+          workspaceId={currentWorkspaceId}
+          userEmail={user?.email}
+        />
+      </div>
+
+      <GanttChart tasks={tasks} job={job} />
 
       <DocumentManager 
         jobId={jobId}
