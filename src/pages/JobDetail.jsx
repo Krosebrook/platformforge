@@ -31,6 +31,7 @@ import { AIJobSummary } from '../components/jobs/AIJobSummary';
 import JobAutomation from '../components/jobs/JobAutomation';
 import SendEmailDialog from '../components/communications/SendEmailDialog';
 import CommunicationHistory from '../components/communications/CommunicationHistory';
+import DocumentManager from '../components/documents/DocumentManager';
 
 const STATUS_FLOW = ['draft', 'pending', 'in_progress', 'review', 'completed'];
 
@@ -464,6 +465,13 @@ export default function JobDetail() {
           <CommunicationHistory customerId={customer?.id} jobId={jobId} />
         </div>
       </div>
+
+      <DocumentManager 
+        jobId={jobId}
+        customerId={customer?.id}
+        organizationId={currentOrgId}
+        workspaceId={currentWorkspaceId}
+      />
 
       {customer && (
         <SendEmailDialog 
