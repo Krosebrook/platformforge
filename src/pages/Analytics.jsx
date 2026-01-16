@@ -11,7 +11,7 @@ import FilterBar from '../components/analytics/FilterBar';
 import StatusDistributionChart from '../components/analytics/charts/StatusDistributionChart';
 import MemberPerformanceChart from '../components/analytics/charts/MemberPerformanceChart';
 import MonthlyTrendChart from '../components/analytics/charts/MonthlyTrendChart';
-import { useAnalyticsData } from '../hooks/useAnalyticsData';
+import { useAnalyticsData } from '../components/analytics/useAnalyticsData';
 
 /**
  * Analytics dashboard page - displays job performance metrics and visualizations
