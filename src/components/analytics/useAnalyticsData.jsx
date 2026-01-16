@@ -4,12 +4,8 @@ import { differenceInDays, format, parseISO } from 'date-fns';
 /**
  * Custom hook for processing and computing analytics data
  * Centralizes all analytics calculations and transformations
- * @param {Array} jobs - Raw job data
- * @param {Object} filters - Active filter state
- * @returns {Object} Computed metrics and chart data
  */
 export function useAnalyticsData(jobs = [], filters = {}) {
-  // Filter jobs based on active filters
   const filteredJobs = useMemo(() => {
     return jobs.filter(job => {
       if (filters.member !== 'all' && job.assigned_to !== filters.member) return false;
@@ -19,7 +15,6 @@ export function useAnalyticsData(jobs = [], filters = {}) {
     });
   }, [jobs, filters]);
 
-  // Calculate key metrics
   const metrics = useMemo(() => {
     const completed = filteredJobs.filter(j => j.status === 'completed');
     const inProgress = filteredJobs.filter(j => j.status === 'in_progress');
@@ -29,7 +24,6 @@ export function useAnalyticsData(jobs = [], filters = {}) {
       j.status !== 'completed'
     );
 
-    // Calculate average completion time for finished jobs
     const avgCompletionTime = completed.length > 0
       ? completed.reduce((sum, j) => {
           if (j.started_at && j.completed_at) {
@@ -42,7 +36,6 @@ export function useAnalyticsData(jobs = [], filters = {}) {
     const totalValue = filteredJobs.reduce((sum, j) => sum + (j.value || 0), 0);
     const completedValue = completed.reduce((sum, j) => sum + (j.value || 0), 0);
 
-    // Calculate on-time delivery rate
     const onTimeRate = completed.length > 0
       ? (completed.filter(j => 
           !j.due_date || new Date(j.completed_at) <= new Date(j.due_date)
@@ -61,7 +54,6 @@ export function useAnalyticsData(jobs = [], filters = {}) {
     };
   }, [filteredJobs]);
 
-  // Generate status distribution data for pie chart
   const statusDistribution = useMemo(() => {
     const statusCounts = {};
     filteredJobs.forEach(job => {
@@ -70,7 +62,6 @@ export function useAnalyticsData(jobs = [], filters = {}) {
     return Object.entries(statusCounts).map(([name, value]) => ({ name, value }));
   }, [filteredJobs]);
 
-  // Calculate team member performance metrics
   const memberPerformance = useMemo(() => {
     const memberStats = {};
     filteredJobs.forEach(job => {
@@ -94,7 +85,6 @@ export function useAnalyticsData(jobs = [], filters = {}) {
       .slice(0, 10);
   }, [filteredJobs]);
 
-  // Generate monthly trend data
   const monthlyTrend = useMemo(() => {
     const months = {};
     filteredJobs.forEach(job => {
