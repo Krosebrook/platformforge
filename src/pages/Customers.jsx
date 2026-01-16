@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
@@ -10,11 +10,10 @@ import { RequireEditor } from '../components/common/PermissionGate';
 import { DataTable } from '../components/ui/DataTable';
 import { CustomersEmptyState } from '../components/ui/EmptyState';
 import { StatusBadge } from '../components/ui/StatusBadge';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
@@ -32,8 +31,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { 
-  Plus, Users, Mail, Phone, Building2, MapPin, 
-  Tag, DollarSign, UserCircle
+  Plus, Mail
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';

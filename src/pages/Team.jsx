@@ -32,11 +32,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { 
-  Plus, Users, Mail, MoreHorizontal, Shield, 
-  UserX, Settings, Clock
+  Plus, Users, MoreHorizontal, Shield, 
+  UserX
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { format, formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 
 export default function Team() {
   const queryClient = useQueryClient();

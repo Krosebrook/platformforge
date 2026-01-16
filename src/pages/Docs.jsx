@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Badge } from "@/components/ui/badge";
 import { 
-  Book, Search, Code, Database, Shield, Server,
-  Users, Settings, Zap, FileText, ChevronRight,
-  ExternalLink, Copy, CheckCircle
+  Book, Search, Code, Database, Shield, Server, Settings, Copy, CheckCircle
 } from 'lucide-react';
 import { toast } from 'sonner';
 

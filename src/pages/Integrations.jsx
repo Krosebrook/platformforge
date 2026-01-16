@@ -20,8 +20,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { 
-  Link2, Plus, Settings, Trash2, ExternalLink,
-  Webhook, Key, RefreshCw, CheckCircle, AlertTriangle
+  Link2, Plus, Settings, Trash2,
+  Webhook, CheckCircle
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';

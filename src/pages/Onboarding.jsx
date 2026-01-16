@@ -10,8 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { 
-  Building2, Zap, CheckCircle, ArrowRight, Users, 
-  Briefcase, Package, Shield, BarChart3, Globe
+  Building2, Zap, CheckCircle, ArrowRight, 
+  Briefcase, Shield
 } from 'lucide-react';
 import { toast } from 'sonner';
 

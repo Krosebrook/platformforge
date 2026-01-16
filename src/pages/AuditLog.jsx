@@ -5,9 +5,8 @@ import { useTenant } from '../components/common/TenantContext';
 import { RequireFeature } from '../components/common/PermissionGate';
 import { DataTable } from '../components/ui/DataTable';
 import { StatusBadge } from '../components/ui/StatusBadge';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -23,10 +22,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { 
-  Activity, Filter, Download, Search, Eye,
+  Activity, Filter, Download, Eye,
   Plus, Edit, Trash2, LogIn, Shield, Settings
 } from 'lucide-react';
-import { format, formatDistanceToNow, subDays } from 'date-fns';
+import { format, subDays } from 'date-fns';
 
 const ACTION_ICONS = {
   create: Plus,

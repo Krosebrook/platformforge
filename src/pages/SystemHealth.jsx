@@ -2,17 +2,15 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { useTenant } from '../components/common/TenantContext';
-import { getJobStats } from '../components/common/BackgroundJobQueue';
-import { StatusBadge } from '../components/ui/StatusBadge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { 
   Heart, Activity, Database, Server, Clock, 
   AlertTriangle, CheckCircle, XCircle, RefreshCw,
-  Zap, BarChart3, HardDrive
+  Zap, HardDrive
 } from 'lucide-react';
-import { format, formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 
 export default function SystemHealth() {
   const { currentOrgId, organization } = useTenant();
