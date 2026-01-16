@@ -6,6 +6,8 @@ import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-quer
 import { TenantProvider, useTenant } from './components/common/TenantContext';
 import { GlobalSearch, useGlobalSearch } from './components/ui/GlobalSearch';
 import { Toaster } from "@/components/ui/sonner";
+import PWAInstallPrompt from './components/common/PWAInstallPrompt';
+import OfflineIndicator from './components/common/OfflineIndicator';
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -441,18 +443,34 @@ function MainLayout({ children, currentPageName }) {
 
       <GlobalSearch isOpen={searchOpen} onClose={closeSearch} />
       <Toaster position="top-right" />
-    </div>
-  );
-}
+      <OfflineIndicator />
+      <PWAInstallPrompt />
+      </div>
+      );
+      }
 
-export default function Layout({ children, currentPageName }) {
-  return (
-    <QueryClientProvider client={queryClient}>
+      export default function Layout({ children, currentPageName }) {
+      // Register service worker for PWA functionality
+      React.useEffect(() => {
+      if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/service-worker.js')
+        .then((registration) => {
+          console.log('Service Worker registered:', registration.scope);
+        })
+        .catch((error) => {
+          console.error('Service Worker registration failed:', error);
+        });
+      }
+      }, []);
+
+      return (
+      <QueryClientProvider client={queryClient}>
       <TenantProvider>
         <MainLayout currentPageName={currentPageName}>
           {children}
         </MainLayout>
       </TenantProvider>
-    </QueryClientProvider>
-  );
-}
+      </QueryClientProvider>
+      );
+      }
