@@ -34,11 +34,12 @@ import {
 } from "@/components/ui/select";
 import { 
   Plus, Briefcase, Calendar, Clock, User,
-  AlertTriangle, CheckCircle, Play, Pause
+  AlertTriangle, CheckCircle, Play, Pause, FileText
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format, formatDistanceToNow } from 'date-fns';
 import { AIJobAssistant } from '../components/jobs/AIJobAssistant';
+import JobTemplateSelector from '../components/templates/JobTemplateSelector';
 
 const STATUS_ORDER = ['draft', 'pending', 'in_progress', 'review', 'completed', 'cancelled', 'on_hold'];
 
@@ -49,6 +50,7 @@ export default function Jobs() {
   const { enforce, buildFilter } = useTenantBoundary();
   
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [showTemplateSelector, setShowTemplateSelector] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [activeTab, setActiveTab] = useState('all');
   const [aiSuggestions, setAISuggestions] = useState(null);
@@ -275,10 +277,16 @@ export default function Jobs() {
           </p>
         </div>
         <RequireEditor>
-          <Button onClick={() => setShowCreateDialog(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            Create Job
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => setShowTemplateSelector(true)}>
+              <FileText className="w-4 h-4 mr-2" />
+              Use Template
+            </Button>
+            <Button onClick={() => setShowCreateDialog(true)}>
+              <Plus className="w-4 h-4 mr-2" />
+              Create Job
+            </Button>
+          </div>
         </RequireEditor>
       </div>
 
@@ -473,6 +481,25 @@ export default function Jobs() {
           </form>
         </DialogContent>
       </Dialog>
+
+      <JobTemplateSelector
+        open={showTemplateSelector}
+        onClose={() => setShowTemplateSelector(false)}
+        onSelect={(template) => {
+          setFormData({
+            title: template.default_title || '',
+            description: template.default_description || '',
+            status: 'draft',
+            priority: template.default_priority || 'medium',
+            due_date: '',
+            customer_id: '',
+            value: ''
+          });
+          setShowTemplateSelector(false);
+          setShowCreateDialog(true);
+        }}
+        organizationId={currentOrgId}
+      />
     </div>
   );
 }

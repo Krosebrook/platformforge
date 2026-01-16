@@ -353,6 +353,8 @@ export default function Integrations() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        <IntegrationCatalog />
       </div>
     </RequireFeature>
   );
