@@ -66,6 +66,12 @@ const NAVIGATION = [
     description: 'Manage your clients'
   },
   { 
+    name: 'Segments', 
+    icon: Users, 
+    page: 'CustomerSegments',
+    description: 'Customer segments'
+  },
+  { 
     name: 'Jobs', 
     icon: Briefcase, 
     page: 'Jobs',

@@ -17,6 +17,7 @@ import Settings from './pages/Settings';
 import SystemHealth from './pages/SystemHealth';
 import Team from './pages/Team';
 import CustomerPortal from './pages/CustomerPortal';
+import CustomerSegments from './pages/CustomerSegments';
 import __Layout from './Layout.jsx';
 
 
@@ -40,6 +41,7 @@ export const PAGES = {
     "SystemHealth": SystemHealth,
     "Team": Team,
     "CustomerPortal": CustomerPortal,
+    "CustomerSegments": CustomerSegments,
 }
 
 export const pagesConfig = {
