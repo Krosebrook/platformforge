@@ -450,19 +450,36 @@ function MainLayout({ children, currentPageName }) {
       }
 
       export default function Layout({ children, currentPageName }) {
-      // Register service worker for PWA functionality
-      React.useEffect(() => {
-      if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/service-worker.js')
-        .then((registration) => {
-          console.log('Service Worker registered:', registration.scope);
-        })
-        .catch((error) => {
-          console.error('Service Worker registration failed:', error);
-        });
-      }
-      }, []);
+        // Register service worker for PWA functionality
+        React.useEffect(() => {
+          if ('serviceWorker' in navigator) {
+            // Fetch service worker from backend function
+            fetch('/functions/serviceWorker')
+              .then(res => res.blob())
+              .then(blob => {
+                const blobUrl = URL.createObjectURL(blob);
+                return navigator.serviceWorker.register(blobUrl);
+              })
+              .then((registration) => {
+                console.log('Service Worker registered:', registration.scope);
+              })
+              .catch((error) => {
+                console.error('Service Worker registration failed:', error);
+              });
+          }
+
+          // Add PWA manifest link
+          const manifestLink = document.createElement('link');
+          manifestLink.rel = 'manifest';
+          manifestLink.href = '/functions/pwaManifest';
+          document.head.appendChild(manifestLink);
+
+          // Add theme color meta tag
+          const themeColorMeta = document.createElement('meta');
+          themeColorMeta.name = 'theme-color';
+          themeColorMeta.content = '#111827';
+          document.head.appendChild(themeColorMeta);
+        }, []);
 
       return (
       <QueryClientProvider client={queryClient}>
