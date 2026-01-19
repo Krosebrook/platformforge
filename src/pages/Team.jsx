@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useQuery } from '@tanstack/react-query';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,6 +32,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 import { 
   Plus, Users, MoreHorizontal, Shield, 
   UserX
@@ -59,8 +61,19 @@ export default function Team() {
     enabled: !!currentOrgId
   });
 
+  const { data: customRoles = [] } = useQuery({
+    queryKey: ['roles', currentOrgId],
+    queryFn: async () => {
+      return await base44.entities.Role.filter({
+        organization_id: currentOrgId,
+        is_active: true
+      });
+    },
+    enabled: !!currentOrgId
+  });
+
   const inviteMutation = useMutation({
-    mutationFn: async ({ email, role }) => {
+    mutationFn: async ({ email, role, custom_role_id }) => {
       const existing = memberships.find(m => m.user_email === email);
       if (existing) {
         throw new Error('This user is already a member');
@@ -70,6 +83,7 @@ export default function Team() {
         organization_id: currentOrgId,
         user_email: email,
         role,
+        custom_role_id: custom_role_id || null,
         status: 'invited',
         invited_by: user.email,
         invited_at: new Date().toISOString()
@@ -244,6 +258,11 @@ export default function Team() {
                       </p>
                       <div className="flex items-center gap-2 mt-1">
                         <RoleBadge role={member.role} size="sm" />
+                        {member.custom_role_id && customRoles.find(r => r.id === member.custom_role_id) && (
+                          <Badge variant="outline" className="text-xs">
+                            {customRoles.find(r => r.id === member.custom_role_id).name}
+                          </Badge>
+                        )}
                         {member.status === 'invited' && (
                           <StatusBadge status="invited" size="sm" />
                         )}
@@ -356,6 +375,28 @@ export default function Team() {
                   </SelectContent>
                 </Select>
               </div>
+
+              {customRoles.length > 0 && (
+                <div className="space-y-2">
+                  <Label>Custom Role (Optional)</Label>
+                  <Select
+                    value={inviteData.custom_role_id || ''}
+                    onValueChange={(value) => setInviteData(prev => ({ ...prev, custom_role_id: value }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="None" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value={null}>None</SelectItem>
+                      {customRoles.map(role => (
+                        <SelectItem key={role.id} value={role.id}>
+                          {role.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setShowInviteDialog(false)}>
