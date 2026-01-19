@@ -9,6 +9,8 @@ import { StatusBadge } from '../components/ui/StatusBadge';
 import { ActivityFeed } from '../components/ui/ActivityFeed';
 import SendEmailDialog from '../components/communications/SendEmailDialog';
 import CommunicationHistory from '../components/communications/CommunicationHistory';
+import InteractionTracker from '../components/crm/InteractionTracker';
+import FollowUpManager from '../components/crm/FollowUpManager';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -335,6 +337,10 @@ export default function CustomerDetail() {
           />
 
           <CommunicationHistory customerId={customerId} />
+
+          <InteractionTracker customerId={customerId} />
+
+          <FollowUpManager customerId={customerId} />
         </div>
       </div>
 
