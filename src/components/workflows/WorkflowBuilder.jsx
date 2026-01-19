@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ConditionalBuilder from './ConditionalBuilder';
 import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import { Plus, X, Mail, CheckSquare, FileText, Bell, Edit } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -33,9 +34,11 @@ export default function WorkflowBuilder({ open, onClose, rule, organizationId, w
     trigger: rule?.trigger || {
       event: 'status_change',
       to_status: '',
-      from_status: ''
+      from_status: '',
+      conditions: []
     },
     actions: rule?.actions || [],
+    approval_settings: rule?.approval_settings || { required: false, approvers: [], approval_type: 'any' },
     is_active: rule?.is_active ?? true
   });
 
@@ -192,6 +195,83 @@ export default function WorkflowBuilder({ open, onClose, rule, organizationId, w
                 </div>
               )}
             </CardContent>
+          </Card>
+
+          <ConditionalBuilder
+            conditions={formData.trigger.conditions}
+            onConditionsChange={(conditions) => setFormData({
+              ...formData,
+              trigger: { ...formData.trigger, conditions }
+            })}
+          />
+
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-base">Approval Settings</CardTitle>
+                <Switch
+                  checked={formData.approval_settings.required}
+                  onCheckedChange={(required) => setFormData({
+                    ...formData,
+                    approval_settings: { ...formData.approval_settings, required }
+                  })}
+                />
+              </div>
+            </CardHeader>
+            {formData.approval_settings.required && (
+              <CardContent className="space-y-3">
+                <div className="space-y-2">
+                  <Label>Approval Type</Label>
+                  <Select
+                    value={formData.approval_settings.approval_type}
+                    onValueChange={(value) => setFormData({
+                      ...formData,
+                      approval_settings: { ...formData.approval_settings, approval_type: value }
+                    })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="any">Any Approver</SelectItem>
+                      <SelectItem value="all">All Approvers</SelectItem>
+                      <SelectItem value="sequential">Sequential</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Approvers (comma-separated emails)</Label>
+                  <Input
+                    placeholder="email1@example.com, email2@example.com"
+                    value={formData.approval_settings.approvers?.join(', ') || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      approval_settings: {
+                        ...formData.approval_settings,
+                        approvers: e.target.value.split(',').map(s => s.trim()).filter(Boolean)
+                      }
+                    })}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Auto-approve after (hours)</Label>
+                  <Input
+                    type="number"
+                    placeholder="Leave empty for manual approval only"
+                    value={formData.approval_settings.auto_approve_after_hours || ''}
+                    onChange={(e) => setFormData({
+                      ...formData,
+                      approval_settings: {
+                        ...formData.approval_settings,
+                        auto_approve_after_hours: parseInt(e.target.value) || null
+                      }
+                    })}
+                  />
+                </div>
+              </CardContent>
+            )}
           </Card>
 
           {/* Actions */}
