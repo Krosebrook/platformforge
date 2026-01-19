@@ -33,6 +33,9 @@ import DocumentManager from '../components/documents/DocumentManager';
 import TaskChecklist from '../components/project/TaskChecklist';
 import TimeTracker from '../components/project/TimeTracker';
 import GanttChart from '../components/project/GanttChart';
+import JobTemplateManager from '../components/templates/JobTemplateManager';
+import { MoreVertical, FileText, Trash } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const STATUS_FLOW = ['draft', 'pending', 'in_progress', 'review', 'completed'];
 
@@ -215,6 +218,19 @@ export default function JobDetail() {
             </>
           )}
         </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <MoreVertical className="w-4 h-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setShowTemplateDialog(true)}>
+              <FileText className="w-4 h-4 mr-2" />
+              Save as Template
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {isOverdue && (
@@ -510,6 +526,12 @@ export default function JobDetail() {
           job={job}
         />
       )}
+
+      <JobTemplateManager
+        open={showTemplateDialog}
+        onClose={() => setShowTemplateDialog(false)}
+        sourceJob={job}
+      />
     </div>
   );
 }

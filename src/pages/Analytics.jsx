@@ -12,6 +12,8 @@ import StatusDistributionChart from '../components/analytics/charts/StatusDistri
 import MemberPerformanceChart from '../components/analytics/charts/MemberPerformanceChart';
 import MonthlyTrendChart from '../components/analytics/charts/MonthlyTrendChart';
 import { useAnalyticsData } from '../components/analytics/useAnalyticsData.jsx';
+import AdvancedFilters from '../components/analytics/AdvancedFilters';
+import { toast } from 'sonner';
 
 /**
  * Analytics dashboard page - displays job performance metrics and visualizations
@@ -27,7 +29,11 @@ export default function AnalyticsPage() {
   const [filters, setFilters] = useState({
     status: 'all',
     member: 'all',
-    customer: 'all'
+    customer: 'all',
+    customer_tier: 'all',
+    assigned_to: 'all',
+    date_from: '',
+    date_to: ''
   });
 
   // Fetch jobs data with React Query
@@ -64,8 +70,46 @@ export default function AnalyticsPage() {
     enabled: !!currentOrgId
   });
 
+  // Apply advanced filters
+  const filteredJobs = jobs.filter(job => {
+    if (filters.status !== 'all' && job.status !== filters.status) return false;
+    if (filters.customer_tier !== 'all') {
+      const customer = customers.find(c => c.id === job.customer_id);
+      if (!customer || customer.tier !== filters.customer_tier) return false;
+    }
+    if (filters.assigned_to !== 'all' && job.assigned_to !== filters.assigned_to) return false;
+    if (filters.date_from && new Date(job.created_date) < new Date(filters.date_from)) return false;
+    if (filters.date_to && new Date(job.created_date) > new Date(filters.date_to)) return false;
+    return true;
+  });
+
   // Use custom hook for data processing - separates business logic from UI
-  const { metrics, statusDistribution, memberPerformance, monthlyTrend } = useAnalyticsData(jobs, filters);
+  const { metrics, statusDistribution, memberPerformance, monthlyTrend } = useAnalyticsData(filteredJobs, filters);
+
+  const exportToCSV = () => {
+    const headers = ['Job ID', 'Title', 'Status', 'Priority', 'Customer', 'Assigned To', 'Value', 'Created Date', 'Completed Date'];
+    const rows = filteredJobs.map(job => [
+      job.reference_number,
+      job.title,
+      job.status,
+      job.priority,
+      customers.find(c => c.id === job.customer_id)?.name || '',
+      job.assigned_to || '',
+      job.value || 0,
+      new Date(job.created_date).toLocaleDateString(),
+      job.completed_at ? new Date(job.completed_at).toLocaleDateString() : ''
+    ]);
+
+    const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `analytics-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+    toast.success('Data exported successfully');
+  };
 
   return (
     <div className="space-y-6">
@@ -75,11 +119,13 @@ export default function AnalyticsPage() {
           <h1 className="text-3xl font-bold text-gray-900">Job Performance Analytics</h1>
           <p className="text-gray-500">Track metrics, identify bottlenecks, and optimize processes</p>
         </div>
-        <Button variant="outline">
+        <Button variant="outline" onClick={exportToCSV}>
           <Download className="w-4 h-4 mr-2" />
           Export Report
         </Button>
       </div>
+
+      <AdvancedFilters filters={filters} onFilterChange={setFilters} onExport={exportToCSV} />
 
       {/* Filter controls - now a separate component */}
       <FilterBar 

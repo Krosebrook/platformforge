@@ -223,17 +223,18 @@ export default function Dashboard() {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-lg">Recent Jobs</CardTitle>
-              <Link to={createPageUrl('Jobs')}>
-                <Button variant="ghost" size="sm">
-                  View All <ArrowRight className="w-4 h-4 ml-1" />
-                </Button>
-              </Link>
-            </div>
-          </CardHeader>
+        <div className="lg:col-span-2 space-y-6">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg">Recent Jobs</CardTitle>
+                <Link to={createPageUrl('Jobs')}>
+                  <Button variant="ghost" size="sm">
+                    View All <ArrowRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </Link>
+              </div>
+            </CardHeader>
           <CardContent>
             {jobsLoading ? (
               <div className="space-y-4">
@@ -292,9 +293,12 @@ export default function Dashboard() {
               </div>
             )}
           </CardContent>
-        </Card>
+          </Card>
 
-        <ActivityFeed limit={10} maxHeight="350px" />
+          <TaskWidget />
+        </div>
+
+        <ActivityFeed limit={10} maxHeight="400px" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
