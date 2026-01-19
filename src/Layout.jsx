@@ -78,6 +78,12 @@ const NAVIGATION = [
     description: 'Orders & tasks'
   },
   { 
+    name: 'Workflows', 
+    icon: Zap, 
+    page: 'Workflows',
+    description: 'Automation rules'
+  },
+  { 
     name: 'Products', 
     icon: Package, 
     page: 'Products',
