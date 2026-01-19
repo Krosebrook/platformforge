@@ -2,6 +2,8 @@ import Analytics from './pages/Analytics';
 import Approvals from './pages/Approvals';
 import AuditLog from './pages/AuditLog';
 import CustomerDetail from './pages/CustomerDetail';
+import CustomerPortal from './pages/CustomerPortal';
+import CustomerSegments from './pages/CustomerSegments';
 import Customers from './pages/Customers';
 import Dashboard from './pages/Dashboard';
 import Docs from './pages/Docs';
@@ -16,8 +18,6 @@ import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import SystemHealth from './pages/SystemHealth';
 import Team from './pages/Team';
-import CustomerPortal from './pages/CustomerPortal';
-import CustomerSegments from './pages/CustomerSegments';
 import __Layout from './Layout.jsx';
 
 
@@ -26,6 +26,8 @@ export const PAGES = {
     "Approvals": Approvals,
     "AuditLog": AuditLog,
     "CustomerDetail": CustomerDetail,
+    "CustomerPortal": CustomerPortal,
+    "CustomerSegments": CustomerSegments,
     "Customers": Customers,
     "Dashboard": Dashboard,
     "Docs": Docs,
@@ -40,8 +42,6 @@ export const PAGES = {
     "Settings": Settings,
     "SystemHealth": SystemHealth,
     "Team": Team,
-    "CustomerPortal": CustomerPortal,
-    "CustomerSegments": CustomerSegments,
 }
 
 export const pagesConfig = {
