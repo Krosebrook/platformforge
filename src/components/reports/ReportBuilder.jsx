@@ -1,219 +1,263 @@
-/**
- * Report Builder Component
- * Configure custom reports with metrics, filters, and visualizations
- */
-
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
-import { useMutation } from '@tanstack/react-query';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { toast } from 'sonner';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 
-const CHART_TYPES = [
-  { value: 'bar', label: 'Bar Chart', icon: '📊' },
-  { value: 'line', label: 'Line Chart', icon: '📈' },
-  { value: 'pie', label: 'Pie Chart', icon: '🥧' },
-  { value: 'scatter', label: 'Scatter Plot', icon: '⚫' },
-  { value: 'heatmap', label: 'Heat Map', icon: '🔥' },
-  { value: 'area', label: 'Area Chart', icon: '📉' }
-];
-
-const AVAILABLE_METRICS = [
-  'total_jobs',
-  'completed_jobs',
-  'in_progress_jobs',
-  'overdue_jobs',
-  'total_value',
-  'completed_value',
-  'avg_completion_time',
-  'on_time_rate',
-  'customer_count',
-  'revenue_by_month'
-];
-
-export default function ReportBuilder({ open, onClose, report, organizationId, workspaceId, onSuccess }) {
-  const [formData, setFormData] = useState({
-    name: report?.name || '',
-    description: report?.description || '',
-    chart_type: report?.chart_type || 'bar',
-    metrics: report?.metrics || [],
-    filters: report?.filters || {},
-    schedule: report?.schedule || { enabled: false, frequency: 'weekly', recipients: [] }
+export default function ReportBuilder({ config = {}, onChange }) {
+  const [config_state, setConfig] = useState({
+    name: config.name || '',
+    report_type: config.report_type || 'summary',
+    data_source: config.data_source || { entity_type: 'Job', selected_fields: [] },
+    filters: config.filters || {},
+    grouping: config.grouping || {},
+    visualization: config.visualization || { chart_type: 'table', show_totals: true },
+    ...config
   });
 
-  const saveMutation = useMutation({
-    mutationFn: async (data) => {
-      if (report) {
-        return await base44.entities.SavedReport.update(report.id, data);
-      } else {
-        return await base44.entities.SavedReport.create({
-          organization_id: organizationId,
-          workspace_id: workspaceId,
-          ...data
-        });
-      }
-    },
-    onSuccess: () => {
-      toast.success(report ? 'Report updated' : 'Report created');
-      onSuccess();
+  const ENTITY_FIELDS = {
+    Job: ['title', 'status', 'priority', 'due_date', 'value', 'assigned_to', 'customer_id', 'completion_rate'],
+    Customer: ['name', 'email', 'status', 'tier', 'lifetime_value', 'assigned_to', 'company'],
+    Task: ['title', 'status', 'priority', 'estimated_hours', 'assigned_to', 'due_date', 'job_id'],
+    TimeEntry: ['hours', 'is_billable', 'user_email', 'job_id', 'task_id', 'hourly_rate'],
+    CustomerInteraction: ['type', 'outcome', 'duration_minutes', 'customer_id', 'interaction_date']
+  };
+
+  const updateConfig = (path, value) => {
+    const newConfig = { ...config_state };
+    const keys = path.split('.');
+    let obj = newConfig;
+    for (let i = 0; i < keys.length - 1; i++) {
+      obj = obj[keys[i]] = obj[keys[i]] || {};
     }
-  });
+    obj[keys[keys.length - 1]] = value;
+    setConfig(newConfig);
+    onChange(newConfig);
+  };
 
-  const toggleMetric = (metric) => {
-    setFormData(prev => ({
-      ...prev,
-      metrics: prev.metrics.includes(metric)
-        ? prev.metrics.filter(m => m !== metric)
-        : [...prev.metrics, metric]
-    }));
+  const toggleField = (field) => {
+    const fields = config_state.data_source.selected_fields || [];
+    const updated = fields.includes(field)
+      ? fields.filter(f => f !== field)
+      : [...fields, field];
+    updateConfig('data_source.selected_fields', updated);
   };
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>{report ? 'Edit Report' : 'Create Custom Report'}</DialogTitle>
-        </DialogHeader>
+    <Tabs defaultValue="data" className="w-full">
+      <TabsList className="grid w-full grid-cols-4">
+        <TabsTrigger value="data">Data Source</TabsTrigger>
+        <TabsTrigger value="filters">Filters</TabsTrigger>
+        <TabsTrigger value="grouping">Grouping</TabsTrigger>
+        <TabsTrigger value="viz">Visualization</TabsTrigger>
+      </TabsList>
 
-        <div className="space-y-6">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Label>Report Name</Label>
-              <Input
-                placeholder="e.g., Monthly Performance Report"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Description</Label>
-              <Textarea
-                placeholder="What does this report show?"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                rows={2}
-              />
-            </div>
-          </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Visualization</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-3 gap-3">
-                {CHART_TYPES.map(type => (
-                  <div
-                    key={type.value}
-                    onClick={() => setFormData({ ...formData, chart_type: type.value })}
-                    className={`p-4 border rounded-lg cursor-pointer text-center transition ${
-                      formData.chart_type === type.value
-                        ? 'border-blue-500 bg-blue-50'
-                        : 'hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="text-2xl mb-1">{type.icon}</div>
-                    <p className="text-sm font-medium">{type.label}</p>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Metrics</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                {AVAILABLE_METRICS.map(metric => (
-                  <div key={metric} className="flex items-center gap-2">
-                    <Checkbox
-                      checked={formData.metrics.includes(metric)}
-                      onCheckedChange={() => toggleMetric(metric)}
-                    />
-                    <Label className="capitalize cursor-pointer" onClick={() => toggleMetric(metric)}>
-                      {metric.replace(/_/g, ' ')}
-                    </Label>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-base">Schedule Email Delivery</CardTitle>
-                <Switch
-                  checked={formData.schedule.enabled}
-                  onCheckedChange={(enabled) => setFormData({
-                    ...formData,
-                    schedule: { ...formData.schedule, enabled }
-                  })}
-                />
-              </div>
-            </CardHeader>
-            {formData.schedule.enabled && (
-              <CardContent className="space-y-3">
-                <div className="space-y-2">
-                  <Label>Frequency</Label>
-                  <Select
-                    value={formData.schedule.frequency}
-                    onValueChange={(frequency) => setFormData({
-                      ...formData,
-                      schedule: { ...formData.schedule, frequency }
-                    })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="daily">Daily</SelectItem>
-                      <SelectItem value="weekly">Weekly</SelectItem>
-                      <SelectItem value="monthly">Monthly</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Recipients (comma-separated emails)</Label>
-                  <Input
-                    placeholder="email1@example.com, email2@example.com"
-                    value={formData.schedule.recipients?.join(', ') || ''}
-                    onChange={(e) => setFormData({
-                      ...formData,
-                      schedule: {
-                        ...formData.schedule,
-                        recipients: e.target.value.split(',').map(s => s.trim()).filter(Boolean)
-                      }
-                    })}
-                  />
-                </div>
-              </CardContent>
-            )}
-          </Card>
+      <TabsContent value="data" className="space-y-4">
+        <div className="space-y-2">
+          <Label>Report Name</Label>
+          <Input
+            value={config_state.name}
+            onChange={(e) => updateConfig('name', e.target.value)}
+            placeholder="e.g., Monthly Job Performance"
+          />
         </div>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button 
-            onClick={() => saveMutation.mutate(formData)}
-            disabled={!formData.name || formData.metrics.length === 0 || saveMutation.isPending}
-          >
-            {saveMutation.isPending ? 'Saving...' : report ? 'Update' : 'Create'} Report
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label>Entity Type</Label>
+            <Select value={config_state.data_source.entity_type} onValueChange={(v) => updateConfig('data_source.entity_type', v)}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.keys(ENTITY_FIELDS).map(entity => (
+                  <SelectItem key={entity} value={entity}>{entity}s</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Report Type</Label>
+            <Select value={config_state.report_type} onValueChange={(v) => updateConfig('report_type', v)}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="summary">Summary</SelectItem>
+                <SelectItem value="detailed">Detailed</SelectItem>
+                <SelectItem value="comparative">Comparative</SelectItem>
+                <SelectItem value="trend">Trend</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <Label>Select Fields to Display</Label>
+          <div className="grid grid-cols-2 gap-3">
+            {ENTITY_FIELDS[config_state.data_source.entity_type]?.map(field => (
+              <div key={field} className="flex items-center gap-2">
+                <Checkbox
+                  checked={config_state.data_source.selected_fields?.includes(field)}
+                  onCheckedChange={() => toggleField(field)}
+                />
+                <Label className="font-normal capitalize cursor-pointer">{field.replace(/_/g, ' ')}</Label>
+              </div>
+            ))}
+          </div>
+        </div>
+      </TabsContent>
+
+      <TabsContent value="filters" className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label>Start Date</Label>
+            <Input
+              type="date"
+              value={config_state.filters.date_range?.start_date || ''}
+              onChange={(e) => updateConfig('filters.date_range.start_date', e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label>End Date</Label>
+            <Input
+              type="date"
+              value={config_state.filters.date_range?.end_date || ''}
+              onChange={(e) => updateConfig('filters.date_range.end_date', e.target.value)}
+            />
+          </div>
+        </div>
+
+        {config_state.data_source.entity_type === 'Job' && (
+          <>
+            <div className="space-y-2">
+              <Label>Status</Label>
+              <div className="space-y-2">
+                {['draft', 'pending', 'in_progress', 'completed', 'cancelled'].map(status => (
+                  <div key={status} className="flex items-center gap-2">
+                    <Checkbox
+                      checked={config_state.filters.status?.includes(status)}
+                      onCheckedChange={(checked) => {
+                        const statuses = config_state.filters.status || [];
+                        updateConfig('filters.status', checked
+                          ? [...statuses, status]
+                          : statuses.filter(s => s !== status)
+                        );
+                      }}
+                    />
+                    <Label className="font-normal capitalize cursor-pointer">{status}</Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Priority</Label>
+              <div className="space-y-2">
+                {['low', 'medium', 'high', 'urgent'].map(priority => (
+                  <div key={priority} className="flex items-center gap-2">
+                    <Checkbox
+                      checked={config_state.filters.priority?.includes(priority)}
+                      onCheckedChange={(checked) => {
+                        const priorities = config_state.filters.priority || [];
+                        updateConfig('filters.priority', checked
+                          ? [...priorities, priority]
+                          : priorities.filter(p => p !== priority)
+                        );
+                      }}
+                    />
+                    <Label className="font-normal capitalize cursor-pointer">{priority}</Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+      </TabsContent>
+
+      <TabsContent value="grouping" className="space-y-4">
+        <div className="space-y-2">
+          <Label>Group By</Label>
+          <Select value={config_state.grouping.group_by_field || ''} onValueChange={(v) => updateConfig('grouping.group_by_field', v)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select grouping field" />
+            </SelectTrigger>
+            <SelectContent>
+              {config_state.data_source.entity_type === 'Job' && (
+                <>
+                  <SelectItem value="status">Status</SelectItem>
+                  <SelectItem value="priority">Priority</SelectItem>
+                  <SelectItem value="assigned_to">Assigned To</SelectItem>
+                </>
+              )}
+              {config_state.data_source.entity_type === 'Customer' && (
+                <>
+                  <SelectItem value="tier">Tier</SelectItem>
+                  <SelectItem value="status">Status</SelectItem>
+                </>
+              )}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label>Aggregations</Label>
+          <div className="space-y-2">
+            {[
+              { field: 'count', label: 'Count' },
+              { field: 'value', label: 'Total Value' },
+              { field: 'estimated_hours', label: 'Total Hours' }
+            ].map(agg => (
+              <div key={agg.field} className="flex items-center gap-2">
+                <Checkbox
+                  checked={config_state.grouping.aggregations?.some(a => a.field === agg.field)}
+                  onCheckedChange={(checked) => {
+                    const aggs = config_state.grouping.aggregations || [];
+                    updateConfig('grouping.aggregations', checked
+                      ? [...aggs, { field: agg.field, function: 'sum' }]
+                      : aggs.filter(a => a.field !== agg.field)
+                    );
+                  }}
+                />
+                <Label className="font-normal cursor-pointer">{agg.label}</Label>
+              </div>
+            ))}
+          </div>
+        </div>
+      </TabsContent>
+
+      <TabsContent value="viz" className="space-y-4">
+        <div className="space-y-2">
+          <Label>Chart Type</Label>
+          <Select value={config_state.visualization.chart_type} onValueChange={(v) => updateConfig('visualization.chart_type', v)}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="table">Table</SelectItem>
+              <SelectItem value="bar">Bar Chart</SelectItem>
+              <SelectItem value="line">Line Chart</SelectItem>
+              <SelectItem value="pie">Pie Chart</SelectItem>
+              <SelectItem value="scatter">Scatter Plot</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <Checkbox
+              checked={config_state.visualization.show_totals}
+              onCheckedChange={(v) => updateConfig('visualization.show_totals', v)}
+            />
+            <Label className="font-normal cursor-pointer">Show Totals</Label>
+          </div>
+        </div>
+      </TabsContent>
+    </Tabs>
   );
 }

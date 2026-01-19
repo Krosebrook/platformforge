@@ -23,6 +23,8 @@ import Team from './pages/Team';
 import Workflows from './pages/Workflows';
 import RoleManagement from './pages/RoleManagement';
 import TemplateManager from './pages/TemplateManager';
+import AuditTrail from './pages/AuditTrail';
+import CustomReports from './pages/CustomReports';
 import __Layout from './Layout.jsx';
 
 
@@ -52,6 +54,8 @@ export const PAGES = {
     "Workflows": Workflows,
     "RoleManagement": RoleManagement,
     "TemplateManager": TemplateManager,
+    "AuditTrail": AuditTrail,
+    "CustomReports": CustomReports,
 }
 
 export const pagesConfig = {
