@@ -34,7 +34,7 @@ import {
 import {
   LayoutDashboard, Users, Package, Briefcase, Settings, 
   Search, Bell, Menu, Building2, ChevronDown, LogOut,
-  Shield, FileText, Activity, Zap, HelpCircle, Link2, Heart, BarChart3
+  Shield, FileText, Activity, Zap, HelpCircle, Link2, Heart, BarChart3, PieChart
 } from 'lucide-react';
 
 const queryClient = new QueryClient({
@@ -58,6 +58,12 @@ const NAVIGATION = [
     icon: BarChart3, 
     page: 'Analytics',
     description: 'Job performance metrics'
+  },
+  { 
+    name: 'Reports', 
+    icon: PieChart, 
+    page: 'Reports',
+    description: 'Custom reports'
   },
   { 
     name: 'Customers', 
