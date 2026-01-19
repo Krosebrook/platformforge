@@ -45,7 +45,7 @@ export default function Team() {
   const [showInviteDialog, setShowInviteDialog] = useState(false);
   const [showRoleDialog, setShowRoleDialog] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
-  const [inviteData, setInviteData] = useState({ email: '', role: 'viewer' });
+  const [inviteData, setInviteData] = useState({ email: '', role: 'viewer', custom_role_id: '' });
   const [newRole, setNewRole] = useState('viewer');
 
   const { data: memberships = [], isLoading } = useQuery({
@@ -93,7 +93,7 @@ export default function Team() {
     onSuccess: () => {
       queryClient.invalidateQueries(['memberships']);
       setShowInviteDialog(false);
-      setInviteData({ email: '', role: 'viewer' });
+      setInviteData({ email: '', role: 'viewer', custom_role_id: '' });
       toast.success('Invitation sent successfully');
     },
     onError: (error) => {

@@ -4,6 +4,7 @@ import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import { useQuery, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TenantProvider, useTenant } from './components/common/TenantContext';
+import { RBACProvider } from './components/common/RBACProvider';
 import { GlobalSearch, useGlobalSearch } from './components/ui/GlobalSearch';
 import { Toaster } from "@/components/ui/sonner";
 import PWAInstallPrompt from './components/common/PWAInstallPrompt';
@@ -137,6 +138,13 @@ const ADMIN_NAVIGATION = [
     icon: Heart, 
     page: 'SystemHealth',
     description: 'Platform status'
+  },
+  { 
+    name: 'Roles & Permissions', 
+    icon: Shield, 
+    page: 'RoleManagement',
+    description: 'Manage roles',
+    permission: 'manage_settings'
   },
   { 
     name: 'Settings', 
@@ -498,12 +506,14 @@ function MainLayout({ children, currentPageName }) {
         }, []);
 
       return (
-      <QueryClientProvider client={queryClient}>
-      <TenantProvider>
-        <MainLayout currentPageName={currentPageName}>
-          {children}
-        </MainLayout>
-      </TenantProvider>
-      </QueryClientProvider>
+        <QueryClientProvider client={queryClient}>
+        <TenantProvider>
+          <RBACProvider>
+            <MainLayout currentPageName={currentPageName}>
+              {children}
+            </MainLayout>
+          </RBACProvider>
+        </TenantProvider>
+        </QueryClientProvider>
       );
       }
