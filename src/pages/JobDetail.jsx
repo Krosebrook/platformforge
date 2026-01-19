@@ -47,6 +47,7 @@ export default function JobDetail() {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [showTemplateDialog, setShowTemplateDialog] = useState(false);
   const [showProjectTools, setShowProjectTools] = useState(true);
 
   const { data: job, isLoading } = useQuery({

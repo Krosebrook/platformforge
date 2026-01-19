@@ -20,6 +20,7 @@ import SystemHealth from './pages/SystemHealth';
 import Team from './pages/Team';
 import Workflows from './pages/Workflows';
 import Reports from './pages/Reports';
+import Tasks from './pages/Tasks';
 import __Layout from './Layout.jsx';
 
 
@@ -46,6 +47,7 @@ export const PAGES = {
     "Team": Team,
     "Workflows": Workflows,
     "Reports": Reports,
+    "Tasks": Tasks,
 }
 
 export const pagesConfig = {

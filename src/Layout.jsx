@@ -34,7 +34,7 @@ import {
 import {
   LayoutDashboard, Users, Package, Briefcase, Settings, 
   Search, Bell, Menu, Building2, ChevronDown, LogOut,
-  Shield, FileText, Activity, Zap, HelpCircle, Link2, Heart, BarChart3, PieChart
+  Shield, FileText, Activity, Zap, HelpCircle, Link2, Heart, BarChart3, PieChart, ListTodo
 } from 'lucide-react';
 
 const queryClient = new QueryClient({
@@ -82,6 +82,12 @@ const NAVIGATION = [
     icon: Briefcase, 
     page: 'Jobs',
     description: 'Orders & tasks'
+  },
+  { 
+    name: 'Tasks', 
+    icon: ListTodo, 
+    page: 'Tasks',
+    description: 'Task management'
   },
   { 
     name: 'Workflows', 

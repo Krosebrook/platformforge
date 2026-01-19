@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ActivityFeed } from '../components/ui/ActivityFeed';
+import TaskWidget from '../components/dashboard/TaskWidget';
 import { StatusBadge, PlanBadge } from '../components/ui/StatusBadge';
 import { 
   Users, Package, Briefcase, TrendingUp, TrendingDown, 
