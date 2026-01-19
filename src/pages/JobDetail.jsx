@@ -34,6 +34,7 @@ import TaskChecklist from '../components/project/TaskChecklist';
 import TimeTracker from '../components/project/TimeTracker';
 import GanttChart from '../components/project/GanttChart';
 import JobTemplateManager from '../components/templates/JobTemplateManager';
+import ApprovalFlow from '../components/workflows/ApprovalFlow';
 import { MoreVertical, FileText, Trash } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
@@ -412,6 +413,8 @@ export default function JobDetail() {
         </div>
 
         <div className="space-y-6">
+          <ApprovalFlow jobId={jobId} organizationId={currentOrgId} />
+
           <JobAutomation 
             job={job}
             onUpdate={() => queryClient.invalidateQueries(['job', jobId])}

@@ -15,12 +15,12 @@ import Onboarding from './pages/Onboarding';
 import ProductDetail from './pages/ProductDetail';
 import Products from './pages/Products';
 import Profile from './pages/Profile';
+import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import SystemHealth from './pages/SystemHealth';
+import Tasks from './pages/Tasks';
 import Team from './pages/Team';
 import Workflows from './pages/Workflows';
-import Reports from './pages/Reports';
-import Tasks from './pages/Tasks';
 import __Layout from './Layout.jsx';
 
 
@@ -42,12 +42,12 @@ export const PAGES = {
     "ProductDetail": ProductDetail,
     "Products": Products,
     "Profile": Profile,
+    "Reports": Reports,
     "Settings": Settings,
     "SystemHealth": SystemHealth,
+    "Tasks": Tasks,
     "Team": Team,
     "Workflows": Workflows,
-    "Reports": Reports,
-    "Tasks": Tasks,
 }
 
 export const pagesConfig = {

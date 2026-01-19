@@ -11,6 +11,7 @@ import SendEmailDialog from '../components/communications/SendEmailDialog';
 import CommunicationHistory from '../components/communications/CommunicationHistory';
 import InteractionTracker from '../components/crm/InteractionTracker';
 import FollowUpManager from '../components/crm/FollowUpManager';
+import AIOutreachAssistant from '../components/customer/AIOutreachAssistant';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -341,6 +342,8 @@ export default function CustomerDetail() {
           <InteractionTracker customerId={customerId} />
 
           <FollowUpManager customerId={customerId} />
+
+          <AIOutreachAssistant customerId={customerId} />
         </div>
       </div>
 
