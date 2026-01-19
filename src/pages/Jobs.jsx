@@ -37,7 +37,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
-import { AIJobAssistant } from '../components/jobs/AIJobAssistant';
+import AIJobAssistant from '../components/jobs/AIJobAssistant';
 import JobTemplateSelector from '../components/templates/JobTemplateSelector';
 
 const STATUS_ORDER = ['draft', 'pending', 'in_progress', 'review', 'completed', 'cancelled', 'on_hold'];
