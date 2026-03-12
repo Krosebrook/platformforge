@@ -90,6 +90,12 @@ const NAVIGATION = [
     page: 'Tasks',
     description: 'Task management'
   },
+  {
+    name: 'AI Assistant',
+    icon: Zap,
+    page: 'AISuggestionDemo',
+    description: 'AI-powered suggestions'
+  },
   { 
     name: 'Workflows', 
     icon: Zap, 
