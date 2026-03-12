@@ -59,6 +59,11 @@ const AuthenticatedApp = () => {
           }
         />
       ))}
+      <Route path="/AISuggestionDemo" element={
+        <LayoutWrapper currentPageName="AISuggestionDemo">
+          <AISuggestionDemo />
+        </LayoutWrapper>
+      } />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
