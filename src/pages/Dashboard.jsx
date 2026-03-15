@@ -128,6 +128,8 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {!editMode && <KPISummaryBar />}
+
       <DashboardBuilder
         widgets={widgets}
         onWidgetsChange={setWidgets}
