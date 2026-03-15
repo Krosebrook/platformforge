@@ -250,12 +250,20 @@ export default function Customers() {
             Manage your customer relationships
           </p>
         </div>
-        <RequireEditor>
-          <Button onClick={() => setShowCreateDialog(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            Add Customer
-          </Button>
-        </RequireEditor>
+        <div className="flex items-center gap-2">
+          <ExportMenu
+            data={exportData}
+            columns={exportColumns}
+            filename="customers"
+            title="Customers Report"
+          />
+          <RequireEditor>
+            <Button onClick={() => setShowCreateDialog(true)}>
+              <Plus className="w-4 h-4 mr-2" />
+              Add Customer
+            </Button>
+          </RequireEditor>
+        </div>
       </div>
 
       <Card>
