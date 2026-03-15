@@ -54,6 +54,7 @@ export default function Jobs() {
   const [showTemplateSelector, setShowTemplateSelector] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
   const [activeTab, setActiveTab] = useState('all');
+  const [viewMode, setViewMode] = useState('list'); // 'list' | 'kanban'
   const [aiSuggestions, setAISuggestions] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
