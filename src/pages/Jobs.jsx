@@ -372,6 +372,22 @@ export default function Jobs() {
         </Card>
       </div>
 
+      <BulkActionsBar
+        selectedCount={selectedRows.length}
+        selectedIds={selectedRows}
+        onClearSelection={() => setSelectedRows([])}
+        onDelete={(ids) => deleteMutation.mutate(ids)}
+        onStatusUpdate={(ids, status) => bulkStatusMutation.mutate({ ids, status })}
+        statusOptions={[
+          { value: 'pending', label: 'Pending' },
+          { value: 'in_progress', label: 'In Progress' },
+          { value: 'review', label: 'In Review' },
+          { value: 'completed', label: 'Completed' },
+          { value: 'on_hold', label: 'On Hold' },
+          { value: 'cancelled', label: 'Cancelled' },
+        ]}
+      />
+
       {viewMode === 'list' ? (
         <Card>
           <CardContent className="p-6">
