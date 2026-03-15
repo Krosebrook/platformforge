@@ -125,6 +125,13 @@ const ADMIN_NAVIGATION = [
     description: 'Connected services',
     permission: 'manage_settings'
   },
+  {
+    name: 'PDF Templates',
+    icon: FileText,
+    page: 'PDFTemplates',
+    description: 'Branded document exports',
+    permission: 'manage_settings'
+  },
   { 
     name: 'Approvals', 
     icon: Shield, 

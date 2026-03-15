@@ -8,6 +8,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import AISuggestionDemo from './pages/AISuggestionDemo';
+import PDFTemplates from './pages/PDFTemplates';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -59,6 +60,11 @@ const AuthenticatedApp = () => {
           }
         />
       ))}
+      <Route path="/PDFTemplates" element={
+        <LayoutWrapper currentPageName="PDFTemplates">
+          <PDFTemplates />
+        </LayoutWrapper>
+      } />
       <Route path="/AISuggestionDemo" element={
         <LayoutWrapper currentPageName="AISuggestionDemo">
           <AISuggestionDemo />

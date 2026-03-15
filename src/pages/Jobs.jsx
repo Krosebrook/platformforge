@@ -35,6 +35,7 @@ import {
   Plus, Briefcase, User,
   AlertTriangle, FileText
 } from 'lucide-react';
+import ExportPDFButton from '../components/pdf/ExportPDFButton';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import AIJobAssistant from '../components/jobs/AIJobAssistant';
