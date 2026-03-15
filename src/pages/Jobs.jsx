@@ -357,31 +357,39 @@ export default function Jobs() {
         </Card>
       </div>
 
-      <Card>
-        <CardContent className="p-6">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-4">
-            <TabsList>
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="active">Active</TabsTrigger>
-              <TabsTrigger value="completed">Completed</TabsTrigger>
-              <TabsTrigger value="overdue">Overdue</TabsTrigger>
-            </TabsList>
-          </Tabs>
+      {viewMode === 'list' ? (
+        <Card>
+          <CardContent className="p-6">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-4">
+              <TabsList>
+                <TabsTrigger value="all">All</TabsTrigger>
+                <TabsTrigger value="active">Active</TabsTrigger>
+                <TabsTrigger value="completed">Completed</TabsTrigger>
+                <TabsTrigger value="overdue">Overdue</TabsTrigger>
+              </TabsList>
+            </Tabs>
 
-          <DataTable
-            columns={columns}
-            data={filteredJobs}
-            isLoading={isLoading}
-            selectable
-            selectedRows={selectedRows}
-            onSelectionChange={setSelectedRows}
-            onRowClick={(row) => navigate(createPageUrl('JobDetail') + `?id=${row.id}`)}
-            onDelete={(ids) => deleteMutation.mutate(ids)}
-            emptyState={<JobsEmptyState onAdd={() => setShowCreateDialog(true)} />}
-            searchPlaceholder="Search jobs..."
-          />
-        </CardContent>
-      </Card>
+            <DataTable
+              columns={columns}
+              data={filteredJobs}
+              isLoading={isLoading}
+              selectable
+              selectedRows={selectedRows}
+              onSelectionChange={setSelectedRows}
+              onRowClick={(row) => navigate(createPageUrl('JobDetail') + `?id=${row.id}`)}
+              onDelete={(ids) => deleteMutation.mutate(ids)}
+              emptyState={<JobsEmptyState onAdd={() => setShowCreateDialog(true)} />}
+              searchPlaceholder="Search jobs..."
+            />
+          </CardContent>
+        </Card>
+      ) : (
+        <JobKanbanBoard
+          jobs={jobs}
+          customers={customers}
+          onJobStatusChange={() => queryClient.invalidateQueries(['jobs'])}
+        />
+      )}
 
       <Dialog open={showCreateDialog} onOpenChange={(open) => {
         setShowCreateDialog(open);
