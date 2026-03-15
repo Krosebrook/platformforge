@@ -33,9 +33,10 @@ import {
 } from "@/components/ui/select";
 import { 
   Plus, Briefcase, User,
-  AlertTriangle, FileText
+  AlertTriangle, FileText, LayoutGrid, List
 } from 'lucide-react';
 import ExportPDFButton from '../components/pdf/ExportPDFButton';
+import JobKanbanBoard from '../components/jobs/JobKanbanBoard';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
 import AIJobAssistant from '../components/jobs/AIJobAssistant';
