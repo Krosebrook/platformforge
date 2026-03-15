@@ -169,6 +169,36 @@ export default function Jobs() {
     }
   });
 
+  const bulkStatusMutation = useMutation({
+    mutationFn: async ({ ids, status }) => {
+      for (const id of ids) {
+        await base44.entities.Job.update(id, { status });
+      }
+    },
+    onSuccess: (_, { ids, status }) => {
+      queryClient.invalidateQueries(['jobs']);
+      setSelectedRows([]);
+      toast.success(`${ids.length} job(s) updated to "${status.replace(/_/g, ' ')}"`);
+    }
+  });
+
+  const exportColumns = [
+    { key: 'title', label: 'Title' },
+    { key: 'reference_number', label: 'Ref #' },
+    { key: 'status', label: 'Status' },
+    { key: 'priority', label: 'Priority' },
+    { key: 'due_date_fmt', label: 'Due Date' },
+    { key: 'assigned_to', label: 'Assigned To' },
+    { key: 'value_fmt', label: 'Value' },
+  ];
+
+  const exportData = filteredJobs.map(j => ({
+    ...j,
+    status: (j.status || '').replace(/_/g, ' '),
+    due_date_fmt: j.due_date ? format(new Date(j.due_date), 'MMM d, yyyy') : '—',
+    value_fmt: j.value ? `$${Number(j.value).toLocaleString()}` : '—',
+  }));
+
   const filteredJobs = React.useMemo(() => {
     if (activeTab === 'all') return jobs;
     if (activeTab === 'active') return jobs.filter(j => ['pending', 'in_progress', 'review'].includes(j.status));
