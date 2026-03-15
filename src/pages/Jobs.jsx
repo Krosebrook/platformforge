@@ -279,6 +279,21 @@ export default function Jobs() {
           </p>
         </div>
         <div className="flex gap-2 flex-wrap">
+          {/* View toggle */}
+          <div className="flex rounded-lg border overflow-hidden">
+            <button
+              onClick={() => setViewMode('list')}
+              className={`px-3 py-2 flex items-center gap-1.5 text-sm transition-colors ${viewMode === 'list' ? 'bg-gray-900 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+            >
+              <List className="w-4 h-4" /> List
+            </button>
+            <button
+              onClick={() => setViewMode('kanban')}
+              className={`px-3 py-2 flex items-center gap-1.5 text-sm transition-colors ${viewMode === 'kanban' ? 'bg-gray-900 text-white' : 'bg-white text-gray-600 hover:bg-gray-50'}`}
+            >
+              <LayoutGrid className="w-4 h-4" /> Board
+            </button>
+          </div>
           <ExportPDFButton
             type="report"
             data={{
