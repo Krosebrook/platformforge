@@ -5,6 +5,7 @@ import { useTenant } from '../components/common/TenantContext';
 import { Button } from "@/components/ui/button";
 import { Edit, Save, Plus, X } from 'lucide-react';
 import DashboardBuilder from '../components/dashboard/DashboardBuilder';
+import KPISummaryBar from '../components/dashboard/KPISummaryBar';
 import { toast } from 'sonner';
 
 const DEFAULT_WIDGETS = [
