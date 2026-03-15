@@ -36,6 +36,8 @@ import {
   AlertTriangle, FileText, LayoutGrid, List
 } from 'lucide-react';
 import ExportPDFButton from '../components/pdf/ExportPDFButton';
+import BulkActionsBar from '../components/common/BulkActionsBar';
+import ExportMenu from '../components/common/ExportMenu';
 import JobKanbanBoard from '../components/jobs/JobKanbanBoard';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
