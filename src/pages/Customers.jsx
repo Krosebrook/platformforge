@@ -30,11 +30,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { 
-  Plus, Mail
-} from 'lucide-react';
+import { Plus, Mail } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import BulkActionsBar from '../components/common/BulkActionsBar';
+import ExportMenu from '../components/common/ExportMenu';
 
 export default function Customers() {
   const navigate = useNavigate();
