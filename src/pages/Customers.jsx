@@ -266,6 +266,22 @@ export default function Customers() {
         </div>
       </div>
 
+      <BulkActionsBar
+        selectedCount={selectedRows.length}
+        selectedIds={selectedRows}
+        onClearSelection={() => setSelectedRows([])}
+        onDelete={(ids) => deleteMutation.mutate(ids)}
+        onStatusUpdate={(ids, status) => bulkStatusMutation.mutate({ ids, status })}
+        onTagUpdate={(ids, tag) => bulkTagMutation.mutate({ ids, tag })}
+        statusOptions={[
+          { value: 'active', label: 'Active' },
+          { value: 'inactive', label: 'Inactive' },
+          { value: 'prospect', label: 'Prospect' },
+          { value: 'churned', label: 'Churned' },
+        ]}
+        tagOptions={['VIP', 'Follow-up', 'At Risk', 'New Lead', 'Partner']}
+      />
+
       <Card>
         <CardContent className="p-6">
           <DataTable
