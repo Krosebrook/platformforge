@@ -127,6 +127,51 @@ export default function Customers() {
     }
   });
 
+  const bulkStatusMutation = useMutation({
+    mutationFn: async ({ ids, status }) => {
+      for (const id of ids) {
+        await base44.entities.Customer.update(id, { status });
+      }
+    },
+    onSuccess: (_, { ids, status }) => {
+      queryClient.invalidateQueries(['customers']);
+      setSelectedRows([]);
+      toast.success(`${ids.length} customer(s) updated to "${status}"`);
+    }
+  });
+
+  const bulkTagMutation = useMutation({
+    mutationFn: async ({ ids, tag }) => {
+      for (const id of ids) {
+        const customer = customers.find(c => c.id === id);
+        const tags = [...(customer?.tags || [])];
+        if (!tags.includes(tag)) tags.push(tag);
+        await base44.entities.Customer.update(id, { tags });
+      }
+    },
+    onSuccess: (_, { ids, tag }) => {
+      queryClient.invalidateQueries(['customers']);
+      setSelectedRows([]);
+      toast.success(`Tag "${tag}" added to ${ids.length} customer(s)`);
+    }
+  });
+
+  const exportColumns = [
+    { key: 'name', label: 'Name' },
+    { key: 'email', label: 'Email' },
+    { key: 'company', label: 'Company' },
+    { key: 'status', label: 'Status' },
+    { key: 'tier', label: 'Tier' },
+    { key: 'lifetime_value', label: 'Lifetime Value' },
+    { key: 'created_date_fmt', label: 'Added' },
+  ];
+
+  const exportData = customers.map(c => ({
+    ...c,
+    lifetime_value: c.lifetime_value ? `$${Number(c.lifetime_value).toLocaleString()}` : '$0',
+    created_date_fmt: c.created_date ? format(new Date(c.created_date), 'MMM d, yyyy') : '',
+  }));
+
   const columns = [
     {
       accessorKey: 'name',
