@@ -326,28 +326,11 @@ export default function Jobs() {
               <LayoutGrid className="w-4 h-4" /> Board
             </button>
           </div>
-          <ExportPDFButton
-            type="report"
-            data={{
-              title: 'Jobs Report',
-              description: `All jobs — exported ${new Date().toLocaleDateString()}`,
-              summary: [
-                { label: 'Total Jobs', value: stats.all },
-                { label: 'Active', value: stats.active },
-                { label: 'Completed', value: stats.completed },
-                { label: 'Overdue', value: stats.overdue },
-              ],
-              columns: ['title', 'status', 'priority', 'due_date', 'assigned_to', 'value'],
-              rows: filteredJobs.map(j => ({
-                title: j.title,
-                status: (j.status || '').replace(/_/g, ' '),
-                priority: j.priority || '',
-                due_date: j.due_date ? new Date(j.due_date).toLocaleDateString() : '—',
-                assigned_to: j.assigned_to || 'Unassigned',
-                value: j.value ? `$${Number(j.value).toLocaleString()}` : '—',
-              })),
-            }}
-            label="Export List"
+          <ExportMenu
+            data={exportData}
+            columns={exportColumns}
+            filename="jobs"
+            title="Jobs Report"
           />
           <RequireEditor>
             <Button variant="outline" onClick={() => setShowTemplateSelector(true)}>
