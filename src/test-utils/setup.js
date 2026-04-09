@@ -94,6 +94,11 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
+// Define global for test environment
+if (typeof global !== 'undefined') {
+  global.global = global;
+}
+
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
   constructor() {}

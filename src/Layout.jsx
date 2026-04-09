@@ -35,7 +35,7 @@ import {
 import {
   LayoutDashboard, Users, Package, Briefcase, Settings, 
   Search, Bell, Menu, Building2, ChevronDown, LogOut,
-  Shield, FileText, Activity, Zap, HelpCircle, Link2, Heart, BarChart3, PieChart, ListTodo
+  Shield, FileText, Activity, Zap, HelpCircle, Link2, Heart, BarChart3, PieChart, ListTodo, Calendar
 } from 'lucide-react';
 
 const queryClient = new QueryClient({
@@ -89,6 +89,12 @@ const NAVIGATION = [
     icon: ListTodo, 
     page: 'Tasks',
     description: 'Task management'
+  },
+  { 
+    name: 'Calendar', 
+    icon: Calendar, 
+    page: 'Calendar',
+    description: 'Job schedule'
   },
   {
     name: 'AI Assistant',

@@ -2,6 +2,11 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useIsMobile } from '../use-mobile';
 
+// Define global for test environment
+if (typeof global !== 'undefined') {
+  global.global = global;
+}
+
 describe('useIsMobile', () => {
   beforeEach(() => {
     // Reset window size to default (desktop)

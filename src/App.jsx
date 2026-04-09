@@ -9,6 +9,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import AISuggestionDemo from './pages/AISuggestionDemo';
 import PDFTemplates from './pages/PDFTemplates';
+import Calendar from './pages/Calendar';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -68,6 +69,11 @@ const AuthenticatedApp = () => {
       <Route path="/AISuggestionDemo" element={
         <LayoutWrapper currentPageName="AISuggestionDemo">
           <AISuggestionDemo />
+        </LayoutWrapper>
+      } />
+      <Route path="/Calendar" element={
+        <LayoutWrapper currentPageName="Calendar">
+          <Calendar />
         </LayoutWrapper>
       } />
       <Route path="*" element={<PageNotFound />} />
