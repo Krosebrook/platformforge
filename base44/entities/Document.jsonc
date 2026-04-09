@@ -1,0 +1,68 @@
+{
+  "name": "Document",
+  "type": "object",
+  "properties": {
+    "organization_id": {
+      "type": "string",
+      "description": "Tenant boundary"
+    },
+    "customer_id": {
+      "type": "string",
+      "description": "Associated customer"
+    },
+    "job_id": {
+      "type": "string",
+      "description": "Associated job"
+    },
+    "name": {
+      "type": "string",
+      "description": "Document display name"
+    },
+    "description": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "invoice",
+        "quote",
+        "proposal",
+        "contract",
+        "report",
+        "pdf",
+        "other"
+      ],
+      "description": "Document type"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL to download the file"
+    },
+    "file_size": {
+      "type": "number",
+      "description": "File size in bytes"
+    },
+    "is_private": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether file requires signed URL for access"
+    },
+    "expiration_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the document becomes unavailable"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "organization_id",
+    "name",
+    "type",
+    "file_url"
+  ]
+}

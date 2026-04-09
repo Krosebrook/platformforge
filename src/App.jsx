@@ -10,6 +10,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import AISuggestionDemo from './pages/AISuggestionDemo';
 import PDFTemplates from './pages/PDFTemplates';
 import Calendar from './pages/Calendar';
+import CustomerPortal from './pages/CustomerPortal';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -74,6 +75,11 @@ const AuthenticatedApp = () => {
       <Route path="/Calendar" element={
         <LayoutWrapper currentPageName="Calendar">
           <Calendar />
+        </LayoutWrapper>
+      } />
+      <Route path="/CustomerPortal" element={
+        <LayoutWrapper currentPageName="CustomerPortal">
+          <CustomerPortal />
         </LayoutWrapper>
       } />
       <Route path="*" element={<PageNotFound />} />

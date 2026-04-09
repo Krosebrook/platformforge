@@ -100,20 +100,24 @@ if (typeof global !== 'undefined') {
 }
 
 // Mock IntersectionObserver
-global.IntersectionObserver = class IntersectionObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  takeRecords() {
-    return [];
-  }
-  unobserve() {}
-};
+if (typeof global !== 'undefined' && !global.IntersectionObserver) {
+  global.IntersectionObserver = class IntersectionObserver {
+    constructor() {}
+    disconnect() {}
+    observe() {}
+    takeRecords() {
+      return [];
+    }
+    unobserve() {}
+  };
+}
 
 // Mock ResizeObserver
-global.ResizeObserver = class ResizeObserver {
-  constructor() {}
-  disconnect() {}
-  observe() {}
-  unobserve() {}
-};
+if (typeof global !== 'undefined' && !global.ResizeObserver) {
+  global.ResizeObserver = class ResizeObserver {
+    constructor() {}
+    disconnect() {}
+    observe() {}
+    unobserve() {}
+  };
+}

@@ -2,6 +2,17 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useIsMobile } from '../use-mobile';
 
+global.matchMedia = (query) => ({
+  matches: false,
+  media: query,
+  onchange: null,
+  addListener: () => {},
+  removeListener: () => {},
+  addEventListener: () => {},
+  removeEventListener: () => {},
+  dispatchEvent: () => false,
+});
+
 // Define global for test environment
 if (typeof global !== 'undefined') {
   global.global = global;
